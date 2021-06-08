@@ -17,4 +17,15 @@
         <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/templates/ranking/guilds/index.html.twig'|file_link(0) }}">templates/ranking/guilds/index.html.twig</a></code></li>
     </ul>
 </div>
+
+<ul style="list-style-type:decimal;">
+    {% for guild in guilds %}
+        <li>
+            {{ guild.name }} - {{ guild.level }} --- {{ guild.master }}  
+        </li>
+    {% else %}
+        <li>No hay gremios</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
