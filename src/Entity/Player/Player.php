@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Entity;
+namespace App\Entity\Player;
 
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
