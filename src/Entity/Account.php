@@ -1,12 +1,15 @@
 <?php
 
-namespace App\Entity\Account;
+namespace App\Entity;
 
 use App\Repository\AccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
+ * @ORM\Table(schema="account", name="account")
  */
 class Account
 {
@@ -48,11 +51,6 @@ class Account
     private $createTime;
 
     /**
-     * @ORM\Column(type="boolean", name="isOnline")
-     */
-    private $isOnline;
-
-    /**
      * @ORM\Column(type="string", length=8)
      */
     private $status;
@@ -81,6 +79,16 @@ class Account
      * @ORM\Column(type="integer")
      */
     private $empire;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Player::class, mappedBy="account")
+     */
+    private $players;
+
+    public function __construct()
+    {
+        $this->players = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -159,18 +167,6 @@ class Account
         return $this;
     }
 
-    public function getIsOnline(): ?bool
-    {
-        return $this->isOnline;
-    }
-
-    public function setIsOnline(bool $isOnline): self
-    {
-        $this->isOnline = $isOnline;
-
-        return $this;
-    }
-
     public function getStatus(): ?string
     {
         return $this->status;
@@ -239,6 +235,36 @@ class Account
     public function setEmpire(int $empire): self
     {
         $this->empire = $empire;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Player[]
+     */
+    public function getPlayers(): Collection
+    {
+        return $this->players;
+    }
+
+    public function addPlayer(Player $player): self
+    {
+        if (!$this->players->contains($player)) {
+            $this->players[] = $player;
+            $player->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removePlayer(Player $player): self
+    {
+        if ($this->players->removeElement($player)) {
+            // set the owning side to null (unless already changed)
+            if ($player->getAccount() === $this) {
+                $player->setAccount(null);
+            }
+        }
 
         return $this;
     }

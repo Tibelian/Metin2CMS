@@ -17,23 +17,23 @@ doctrine:
             account:
                 connection: account
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-                auto_mapping: false
+                auto_mapping: true
                 mappings:
                     AppAccount:
                         is_bundle: false
                         type: annotation
-                        dir: '%kernel.project_dir%/src/Entity/Account'
-                        prefix: 'App\Entity\Account'
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity'
                         alias: AppAccount
             player:
                 connection: player
                 naming_strategy: doctrine.orm.naming_strategy.underscore_number_aware
-                auto_mapping: true
+                auto_mapping: false
                 mappings:
                     AppPlayer:
                         is_bundle: false
                         type: annotation
-                        dir: '%kernel.project_dir%/src/Entity/Player'
-                        prefix: 'App\Entity\Player'
+                        dir: '%kernel.project_dir%/src/Entity'
+                        prefix: 'App\Entity'
                         alias: AppPlayer
         

@@ -1,12 +1,13 @@
 <?php
 
-namespace App\Entity\Player;
+namespace App\Entity;
 
 use App\Repository\PlayerRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=PlayerRepository::class)
+ * @ORM\Table(schema="player", name="player")
  */
 class Player
 {
@@ -16,11 +17,6 @@ class Player
      * @ORM\Column(type="integer")
      */
     private $id;
-
-    /**
-     * @ORM\Column(type="integer")
-     */
-    private $accountId;
 
     /**
      * @ORM\Column(type="string", length=24)
@@ -162,21 +158,14 @@ class Player
      */
     private $horseLevel;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="players")
+     */
+    private $account;
+
     public function getId(): ?int
     {
         return $this->id;
-    }
-
-    public function getAccountId(): ?int
-    {
-        return $this->accountId;
-    }
-
-    public function setAccountId(int $accountId): self
-    {
-        $this->accountId = $accountId;
-
-        return $this;
     }
 
     public function getName(): ?string
@@ -511,6 +500,18 @@ class Player
     public function setHorseLevel(int $horseLevel): self
     {
         $this->horseLevel = $horseLevel;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
 
         return $this;
     }
