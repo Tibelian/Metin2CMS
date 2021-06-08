@@ -17,4 +17,13 @@
         <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/templates/ranking/players/index.html.twig'|file_link(0) }}">templates/ranking/players/index.html.twig</a></code></li>
     </ul>
 </div>
+
+<ul style="list-style-type:decimal;">
+    {% for player in players %}
+        <li>{{ player.name }} - {{ player.level }}</li>
+    {% else %}
+        <li>No hay jugadores</li>
+    {% endfor %}
+</ul>
+
 {% endblock %}
