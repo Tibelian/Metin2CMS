@@ -48,7 +48,7 @@ class Account
     private $createTime;
 
     /**
-     * @ORM\Column(type="boolean")
+     * @ORM\Column(type="boolean", name="isOnline")
      */
     private $isOnline;
 
