@@ -1,19 +1,142 @@
-<!DOCTYPE html>
-<html>
-    <head>
-        <meta charset="UTF-8">
-        <title>{% block title %}Welcome!{% endblock %}</title>
-        {# Run `composer require symfony/webpack-encore-bundle`
-           and uncomment the following Encore helpers to start using Symfony UX #}
-        {% block stylesheets %}
-            {#{{ encore_entry_link_tags('app') }}#}
-        {% endblock %}
 
-        {% block javascripts %}
-            {#{{ encore_entry_script_tags('app') }}#}
-        {% endblock %}
-    </head>
-    <body>
-        {% block body %}{% endblock %}
-    </body>
+<!doctype html>
+<html lang="{{ app.request.locale }}">
+<head>
+    <!-- meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- stylesheets -->
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/bootstrap.min.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/fontawesome-all.min.css')) }}">
+	<link rel="stylesheet" href="{{ absolute_url(asset('assets/css/lightbox.css')) }}">
+    <link rel="stylesheet" href="{{ absolute_url(asset('assets/css/main.css')) }}">
+    {% block stylesheets %}
+    {% endblock %}
+
+    <title>{% block title %}Welcome!{% endblock %}</title>
+</head>
+<body>
+
+    <!-- ########## -->
+	<div class="wrapper">
+		
+        <!-- ########## -->
+		<header>
+			<div class="d-flex justify-content-center">
+				<a href="{{ url('base') }}"><img src="{{ absolute_url(asset('assets/images/logo.png')) }}" width="250px"></a>
+			</div>
+			<nav>
+
+                {% if is_granted('ROLE_USER') %}
+				    <a href="{{ url('base') }}" class="login-button">Cerrar sesión</a>
+                {% else %}
+				    <a href="#" class="login-button" data-toggle="modal" data-target="#loginmodal">Iniciar Sesión</a>
+                {% endif %}
+
+				<ul>
+					<li class="w-135"><a href="{{ url('homepage') }}">INICIO</a></li>
+					<li class="w-95"><a href="{{ url('ranking_players') }}">RANKING</a></li>
+					<li class="w-90"><a href="{{ url('base') }}">MEDIA</a></li>
+					<li class="w-105"><a href="{{ url('base') }}">SOPORTE</a></li>
+					<li class="w-90"><a href="{{ url('base') }}">FORO</a></li>
+                    
+                {% if is_granted('ROLE_USER') %}
+					<li class="w-150"><a href="{{ url('base') }}">PANEL USUARIO</a></li>
+                {% else %}
+					<li class="w-150"><a href="{{ url('base') }}">REGISTRARSE</a></li>
+                {% endif %}
+
+				</ul>
+			</nav>
+		</header>
+
+        <!-- ########## -->
+		<main>
+
+            <!-- ########## -->
+			<section>
+
+                <!-- ########## -->
+				<div id="carousel" class="carousel slide" data-ride="carousel">
+					<div class="carousel-inner">
+						<div class="carousel-item active">
+							<img src="{{ absolute_url(asset('assets/images/slider-example.png')) }}" class="d-block w-100" alt="Slider 1">
+						</div>
+						<div class="carousel-item">
+							<img src="{{ absolute_url(asset('assets/images/slider-example.png')) }}" class="d-block w-100" alt="Slider 2">
+						</div>
+						<div class="carousel-item">
+							<img src="{{ absolute_url(asset('assets/images/slider-example.png')) }}" class="d-block w-100" alt="Slider 3">
+						</div>
+					</div>
+					<a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
+						<span class="slider-prev-icon"></span>
+					</a>
+					<a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
+						<span class="slider-next-icon"></span>
+					</a>
+				</div>
+				
+                <!-- ########## -->
+                {% block body %}{% endblock %}
+				
+			</section>
+			
+             <!-- ########## -->
+			<aside>
+				<a href="{{ url('download') }}" class="download-button">DESCARGAR</a>
+				
+				<div class="statics">
+					<h6>Estado del servidor</h6>
+					<div class="d-flex justify-content-between align-items-center border-bottom py-2">
+						<p>Usuarios en línea</p>
+						<p><span id="status-players"></span></p>
+					</div>
+					<div class="d-flex justify-content-between align-items-center border-bottom py-2">
+						<p>Usuarios en línea (24h)</p>
+						<p><span id="status-players24"></span></p>
+					</div>
+					<div class="d-flex justify-content-between align-items-center border-bottom py-2">
+						<p>Tiendas offline</p>
+						<p><span id="status-shop"></span></p>
+					</div>
+                    <div class="d-flex justify-content-between align-items-center border-bottom">
+                        <p>Canal 1 <font color="#4c4240">offline</font></p>
+                        <p><img src="{{ absolute_url(asset('assets/images/offline.png')) }}" width="28px"></p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center border-bottom">
+                        <p>Canal 2 <font color="#4c4240">offline</font></p>
+                        <p><img src="{{ absolute_url(asset('assets/images/offline.png')) }}" width="28px"></p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center border-bottom">
+                        <p>Canal 3 <font color="#4c4240">offline</font></p>
+                        <p><img src="{{ absolute_url(asset('assets/images/offline.png')) }}" width="28px"></p>
+                    </div>
+                    <div class="d-flex justify-content-between align-items-center border-bottom">
+                        <p>Canal 4 <font color="#4c4240">offline</font></p>
+                        <p><img src="{{ absolute_url(asset('assets/images/offline.png')) }}" width="28px"></p>
+                    </div>
+				</div>
+				
+				<div class="top5">
+					<h6>Ranking</h6>
+					<div id="ranking-top"></div>
+				</div>
+			</aside>
+			
+		</main>
+
+    </div>
+    
+    <!-- javascripts -->
+    <script src="{{ absolute_url(asset('assets/js/jquery-3.3.1.slim.min.js')) }}"></script>
+    <script src="{{ absolute_url(asset('assets/js/popper.min.js')) }}"></script>
+    <script src="{{ absolute_url(asset('assets/js/bootstrap.min.js')) }}"></script>
+	<script src="{{ absolute_url(asset('assets/js/lightbox-plus-jquery.min.js')) }}"></script>
+    <script src="{{ absolute_url(asset('assets/js/main.js')) }}"></script>
+    {% block javascripts %}
+    {% endblock %}
+    
+</body>
 </html>

@@ -3,18 +3,55 @@
 {% block title %}Hello DownloadController!{% endblock %}
 
 {% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <div class="news-area">
+        <h2>Descargas</h2>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/src/Controller/DownloadController.php'|file_link(0) }}">src/Controller/DownloadController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/templates/download/index.html.twig'|file_link(0) }}">templates/download/index.html.twig</a></code></li>
-    </ul>
-</div>
+        <div class="col-12">
+            <table class="download-area">
+                <tr class="dark">
+                    <th>Archivo<th>
+                    <th>Tamaño<th>
+                    <th>Fecha<th>
+                    <th>Enlace<th>
+                </tr>
+                <tr style="height:2px;"></tr>
+                <tr>
+                    <td>Cliente (MEGA)<td>
+                    <td>1.72 GB<td>
+                    <td>07-02-2019<td>
+                    <td><a href="#"><i class="fas fa-download"></i></a><td>
+                </tr>
+                <tr>
+                    <td>AutoPatcher (Direct)<td>
+                    <td>485 KB<td>
+                    <td>07-02-2019<td>
+                    <td><a href="#"><i class="fas fa-download"></i></a><td>
+                </tr>
+            </table>
+        </div>
+        <div class="download-req row mt-4">
+            <div class="col-6 pr-0 pl-4">
+                <h4>Requisitos mínimos</h4>
+                <ul>
+                    <li>Sistema Operativo: Windows Vista, 7</li>
+                    <li>Procesador: Pentium 3 1.5 GHz</li>
+                    <li>RAM: 512 MB</li>
+                    <li>Tarjeta Gráfica: Min. 64 MB</li>
+                    <li>Almacenamiento libre: 1,5 GB</li>
+                </ul>
+            </div>
+            <div class="col-6 pl-0 pr-4">
+                <h4>Requisitos recomendables</h4>
+                <ul>
+                    <li>Sistema Operativo: Windows Vista, 7</li>
+                    <li>Procesador: Pentium 4 2 GHz</li>
+                    <li>RAM: 1,5 GB</li>
+                    <li>Tarjeta Gráfica: Min. 256 MB</li>
+                    <li>Almacenamiento libre: 2 GB</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
