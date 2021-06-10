@@ -14,11 +14,12 @@ class LocaleController extends AbstractController {
      */
     public function changeLocale($locale, Request $request): Response {
 
-        // cambia el idioma en la sesión
-        // y después el event suscriber se ocupa del resto
+        // save the language into the session
+        // and after that the event suscriber
+        // overrides the changes
         $request->getSession()->set('_locale', $locale);
 
-        // redirecciona a la página de inicio
+        // redirect to home
         return $this->redirectToRoute('base');
 
     }
