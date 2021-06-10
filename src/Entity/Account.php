@@ -6,12 +6,14 @@ use App\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
+use Symfony\Component\Security\Core\User\UserInterface;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
  * @ORM\Table(schema="account", name="account")
  */
-class Account
+class Account implements UserInterface
 {
     /**
      * @ORM\Id
@@ -19,6 +21,11 @@ class Account
      * @ORM\Column(type="integer")
      */
     private $id;
+
+    /**
+     * 
+     */
+    private $roles = [];
 
     /**
      * @ORM\Column(type="string", length=30)
@@ -88,6 +95,73 @@ class Account
     public function __construct()
     {
         $this->players = new ArrayCollection();
+    }
+
+    /**
+     * A visual identifier that represents this user.
+     *
+     * @see UserInterface
+     */
+    public function getUserIdentifier(): string
+    {
+        return (string) $this->login;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function getRoles(): array
+    {
+        $roles = $this->roles;
+
+        switch ($this->webAdmin) {
+            case 9:
+                $roles[] = 'ROLE_ADMIN';
+                $roles[] = 'ROLE_MOD';
+                $roles[] = 'ROLE_HELPER';
+                $roles[] = 'ROLE_USER';
+                break;
+            case 8:
+                $roles[] = 'ROLE_MOD';
+                $roles[] = 'ROLE_HELPER';
+                $roles[] = 'ROLE_USER';
+                break;
+            case 7:
+                $roles[] = 'ROLE_HELPER';
+                $roles[] = 'ROLE_USER';
+                break;
+            default: // guarantee every user at least has ROLE_USER
+                $roles[] = 'ROLE_USER';
+                break;
+        }
+
+        return array_unique($roles);
+    }
+
+    public function setRoles(array $roles): self
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
+     * This method can be removed in Symfony 6.0 - is not needed for apps that do not check user passwords.
+     *
+     * @see UserInterface
+     */
+    public function getSalt(): ?string
+    {
+        return null;
+    }
+
+    /**
+     * @see UserInterface
+     */
+    public function eraseCredentials()
+    {
+        // If you store any temporary, sensitive data on the user, clear it here
+        // $this->plainPassword = null;
     }
 
     public function getId(): ?int
