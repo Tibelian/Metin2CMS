@@ -29,9 +29,9 @@
 			<nav>
 
                 {% if is_granted('ROLE_USER') %}
-				    <a href="{{ url('base') }}" class="login-button">Cerrar sesión</a>
+				    <a href="{{ url('app_logout') }}" class="login-button">Cerrar sesión</a>
                 {% else %}
-				    <a href="#" class="login-button" data-toggle="modal" data-target="#loginmodal">Iniciar Sesión</a>
+				    <a href="{{ url('app_login') }}" class="login-button">Iniciar Sesión</a>
                 {% endif %}
 
 				<ul>
