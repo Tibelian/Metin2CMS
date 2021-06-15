@@ -44,7 +44,7 @@
                 {% if is_granted('ROLE_USER') %}
 					<li class="w-150"><a href="{{ url('user_profile') }}">PANEL USUARIO</a></li>
                 {% else %}
-					<li class="w-150"><a href="{{ url('base') }}">REGISTRARSE</a></li>
+					<li class="w-150"><a href="{{ url('app_register') }}">REGISTRARSE</a></li>
                 {% endif %}
 
 				</ul>
