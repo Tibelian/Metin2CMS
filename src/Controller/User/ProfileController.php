@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}/user")
+ */
 class ProfileController extends AbstractController
 {
     /**
-     * @Route("/user/profile", name="user_profile")
+     * @Route("/profile", name="user_profile")
      */
     public function index(): Response
     {

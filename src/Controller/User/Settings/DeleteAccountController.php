@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}/user/settings")
+ */
 class DeleteAccountController extends AbstractController
 {
     /**
-     * @Route("/user/settings/delete/account", name="user_settings_delete_account")
+     * @Route("/delete/account", name="user_settings_delete_account")
      */
     public function index(): Response
     {

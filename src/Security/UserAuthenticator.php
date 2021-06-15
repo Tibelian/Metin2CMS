@@ -48,13 +48,11 @@ class UserAuthenticator extends AbstractLoginFormAuthenticator
             AND a.password = PASSWORD(:password)
         ';
         $stmt = $conn->prepare($sql);
-        $stmt->execute(['username' => $username, 'password' => $password]);
-        $result = $stmt->fetchAllAssociative();
+        $resultStmt = $stmt->executeQuery(['username' => $username, 'password' => $password]);
+        $result = $resultStmt->fetchAllAssociative();
 
         if (!isset($result[0])) {
-
             return new Passport(new UserBadge(''), new PasswordCredentials(''));
-
         }
         
         // si se encuentra la cuenta con esa contraseña

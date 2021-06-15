@@ -7,10 +7,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}/ranking")
+ */
 class GuildsController extends AbstractController
 {
     /**
-     * @Route("/ranking/guilds", name="ranking_guilds")
+     * @Route("/guilds", name="ranking_guilds")
      */
     public function index(): Response
     {

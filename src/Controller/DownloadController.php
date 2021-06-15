@@ -9,7 +9,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class DownloadController extends AbstractController
 {
     /**
-     * @Route("/download", name="download")
+     * @Route("/{_locale}/download", name="download")
      */
     public function index(): Response
     {

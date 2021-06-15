@@ -11,7 +11,8 @@ use Symfony\Component\Security\Core\User\UserInterface;
 /**
  * @ORM\Entity(repositoryClass=UserRepository::class)
  * @ORM\Table(schema="account", name="account")
- * @UniqueEntity(fields={"username"}, message="There is already an account with this username")
+ * @UniqueEntity(fields={"username"}, message="alert.error.userUnique")
+ * @UniqueEntity(fields={"email"}, message="alert.error.emailUnique")
  */
 class User implements UserInterface, PasswordAuthenticatedUserInterface
 {
@@ -26,6 +27,11 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
      * @ORM\Column(type="string", length=30, unique=true, name="login")
      */
     private $username;
+
+    /**
+     * @ORM\Column(type="string", length=64, unique=true, name="email")
+     */
+    private $email;
 
     /**
      * 
@@ -45,13 +51,20 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     private $account;
 
     /**
-     * @ORM\Column(type="boolean")
+     * 
      */
     private $isVerified = false;
 
     public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setId(int $id): self
+    {
+        $this->id = $id;
+
+        return $this;
     }
 
     public function getUsername(): ?string
@@ -62,6 +75,18 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setUsername(string $username): self
     {
         $this->username = $username;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): self
+    {
+        $this->email = $email;
 
         return $this;
     }
@@ -144,11 +169,17 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
 
     public function isVerified(): bool
     {
+        $this->isVerified = ($this->getAccount()->getStatus() == 'OK');
         return $this->isVerified;
     }
 
     public function setIsVerified(bool $isVerified): self
     {
+        if ($isVerified) {
+            $this->getAccount()->setStatus('OK');
+        } else {
+            $this->getAccount()->setStatus('PENDING');
+        }
         $this->isVerified = $isVerified;
 
         return $this;

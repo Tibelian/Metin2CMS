@@ -25,12 +25,13 @@ class EmailVerifier
 
     public function sendEmailConfirmation(string $verifyEmailRouteName, UserInterface $user, TemplatedEmail $email): void
     {
+
+        // generate the token
         $signatureComponents = $this->verifyEmailHelper->generateSignature(
             $verifyEmailRouteName,
             $user->getId(),
-            $user->getAccount()
+            $user->getEmail()
         );
-
         $context = $email->getContext();
         $context['signedUrl'] = $signatureComponents->getSignedUrl();
         $context['expiresAtMessageKey'] = $signatureComponents->getExpirationMessageKey();
@@ -38,7 +39,9 @@ class EmailVerifier
 
         $email->context($context);
 
+        // send the email
         $this->mailer->send($email);
+        
     }
 
     /**
@@ -46,11 +49,16 @@ class EmailVerifier
      */
     public function handleEmailConfirmation(Request $request, UserInterface $user): void
     {
-        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getAccount());
 
+        // verify the token
+        $this->verifyEmailHelper->validateEmailConfirmation($request->getUri(), $user->getId(), $user->getEmail());
+
+        // set the new status
         $user->setIsVerified(true);
 
+        // save the changes
         $this->entityManager->persist($user);
         $this->entityManager->flush();
+
     }
 }

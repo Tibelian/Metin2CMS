@@ -5,11 +5,14 @@ namespace App\Entity;
 use App\Repository\AccountRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=AccountRepository::class)
  * @ORM\Table(schema="account", name="account")
+ * @UniqueEntity(fields={"login"}, message="alert.error.userUnique")
+ * @UniqueEntity(fields={"email"}, message="alert.error.emailUnique")
  */
 class Account
 {
@@ -34,7 +37,7 @@ class Account
     /**
      * @ORM\Column(type="string", length=16, nullable=true)
      */
-    private $realName;
+    private $realName = '';
 
     /**
      * @ORM\Column(type="string", length=13)
@@ -54,17 +57,17 @@ class Account
     /**
      * @ORM\Column(type="string", length=8)
      */
-    private $status;
+    private $status = 'PENDING';
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $coins;
+    private $coins = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $webAdmin;
+    private $webAdmin = 0;
 
     /**
      * @ORM\Column(type="string", length=15)
@@ -79,7 +82,7 @@ class Account
     /**
      * @ORM\Column(type="integer")
      */
-    private $empire;
+    private $empire = 0;
 
     /**
      * @ORM\OneToMany(targetEntity=Player::class, mappedBy="account")

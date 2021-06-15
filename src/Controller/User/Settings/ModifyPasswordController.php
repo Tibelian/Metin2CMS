@@ -6,10 +6,13 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
+/**
+ * @Route("/{_locale}/user/settings")
+ */
 class ModifyPasswordController extends AbstractController
 {
     /**
-     * @Route("/user/settings/modify/password", name="user_settings_modify_password")
+     * @Route("/modify/password", name="user_settings_modify_password")
      */
     public function index(): Response
     {

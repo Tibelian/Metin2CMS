@@ -2,18 +2,23 @@
 
 namespace App\Controller\User;
 
+use App\Entity\Account;
 use App\Entity\User;
 use App\Form\RegistrationFormType;
 use App\Security\EmailVerifier;
+use DateTime;
+use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mime\Address;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use SymfonyCasts\Bundle\VerifyEmail\Exception\VerifyEmailExceptionInterface;
 
+/**
+ * @Route("/{_locale}/user")
+ */
 class RegistrationController extends AbstractController
 {
     private $emailVerifier;
@@ -26,41 +31,67 @@ class RegistrationController extends AbstractController
     /**
      * @Route("/register", name="app_register")
      */
-    public function register(Request $request, UserPasswordEncoderInterface $passwordEncoder): Response
+    public function register(Request $request): Response
     {
+
+        // the new user object
         $user = new User();
+
+        // register form is prepared
         $form = $this->createForm(RegistrationFormType::class, $user);
         $form->handleRequest($request);
 
+        // if the form is submitted and the data is valid
+        // then saves the new account
         if ($form->isSubmitted() && $form->isValid()) {
+
+            // database manager
+            $entityManager = $this->getDoctrine()->getManager();
+
             // encode the plain password
             $user->setPassword(
-                $passwordEncoder->encodePassword(
-                    $user,
-                    $form->get('plainPassword')->getData()
+                $this->encodePassword(
+                    $form->get('plainPassword')->getData(),
+                    $entityManager
                 )
             );
 
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($user);
+            // account info
+            $account = new Account();
+            $account->setEmail($user->getEmail());
+            $account->setLogin($user->getUsername());
+            $account->setPassword($user->getPassword());
+            $account->setWebIp($request->getClientIp());
+            $account->setSocialId($form->get('socialId')->getData());
+            $account->setCreateTime(new DateTime());
+            $user->setAccount($account);
+            //dd($user);
+
+            // account is saved into the db
+            $entityManager->persist($account);
             $entityManager->flush();
+            $user->setId($account->getId());
 
             // generate a signed url and email it to the user
             $this->emailVerifier->sendEmailConfirmation('app_verify_email', $user,
                 (new TemplatedEmail())
-                    ->from(new Address('test@tibelian.com', 'TibelianM2CMS'))
-                    ->to($user->getAccount())
+                    ->from(new Address($_ENV['MAILER_EMAIL'], $_ENV['MAILER_NAME'],))
+                    ->to($user->getEmail())
                     ->subject('Please Confirm your Email')
-                    ->htmlTemplate('registration/confirmation_email.html.twig')
+                    ->htmlTemplate('user/registration/confirmation_email.html.twig')
             );
-            // do anything else you need here, like send an email
-
+            
+            // after the registration the user is loggedin
+            // and redirects him to the profile
             return $this->redirectToRoute('user_profile');
+
         }
 
+        // show the view
         return $this->render('user/registration/register.html.twig', [
             'registrationForm' => $form->createView(),
         ]);
+
     }
 
     /**
@@ -83,5 +114,20 @@ class RegistrationController extends AbstractController
         $this->addFlash('success', 'Your email address has been verified.');
 
         return $this->redirectToRoute('app_register');
+    }
+
+    /**
+     * 
+     */
+    private function encodePassword(string $plainPassword, EntityManagerInterface $entityManager): string {
+
+        $conn = $entityManager->getConnection();
+        $sql = 'SELECT PASSWORD(:plainPassword) as encrypted';
+        $stmt = $conn->prepare($sql);
+        $resultStmt = $stmt->executeQuery(['plainPassword' => $plainPassword]);
+        $result = $resultStmt->fetchAllAssociative();
+
+        return $result[0]['encrypted'];
+
     }
 }
