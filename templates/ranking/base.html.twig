@@ -1,0 +1,23 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Ranking{% endblock %}
+
+{% block body %}
+
+    <div class="news-area">
+
+        <h1>Ranking</h1>
+
+        <div class="col-12 d-flex justify-content-around my-3">
+            <a href="{{ absolute_url(path('ranking_players')) }}" class="btn btn-cancel">Jugadores</a>
+            <a href="{{ absolute_url(path('ranking_guilds')) }}" class="btn btn-cancel">Gremios</a>
+        </div>
+
+        <div class="col-12 d-flex flex-wrap justify-content-center">
+            {% block rankingContent %}
+            {% endblock %}
+        </div>
+
+    </div>
+
+{% endblock %}

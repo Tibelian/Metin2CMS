@@ -1,29 +1,41 @@
-{% extends 'base.html.twig' %}
+{% extends 'ranking/base.html.twig' %}
 
-{% block title %}Hello PlayersController!{% endblock %}
+{% block rankingTitle %}Players{% endblock %}
 
-{% block body %}
-<style>
-    .example-wrapper { margin: 1em auto; max-width: 800px; width: 95%; font: 18px/1.5 sans-serif; }
-    .example-wrapper code { background: #F5F5F5; padding: 2px 6px; }
-</style>
+{% block rankingContent %}
 
-<div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
-
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/src/Controller/Ranking/PlayersController.php'|file_link(0) }}">src/Controller/Ranking/PlayersController.php</a></code></li>
-        <li>Your template at <code><a href="{{ 'C:/xampp/htdocs/Metin2CMS/templates/ranking/players/index.html.twig'|file_link(0) }}">templates/ranking/players/index.html.twig</a></code></li>
-    </ul>
-</div>
-
-<ul style="list-style-type:decimal;">
-    {% for player in players %}
-        <li>{{ player.name }} - {{ player.level }}</li>
-    {% else %}
-        <li>No hay jugadores</li>
-    {% endfor %}
-</ul>
-
+    <table class="my-3 w-100 table table-sm table-hover table-borderless">
+        <tr class='ranking-cols'>
+            <td>#</td>
+            <td>Nombre</td>
+            <td>Nivel</td>
+            <td>Experienica</td>
+            <td>Clase</td>
+            <td>Reino</td>
+        </tr>
+        <tr class='spacer'></tr>
+        {% set i = (players.page|default(1)) * 20 - 20 %}
+        {% for player in players %}
+            {% set i = i + 1 %}
+            <tr>
+                <td>{{ i }}</td>
+                <td>{{ player.name }}</td>
+                <td>{{ player.level }}</td>
+                <td>{{ player.exp }}</td>
+                <td>{{ player.job }}</td>
+                <td>{{ player.account.empire|default("undefined") }}</td>
+            </tr>
+            <tr class='spacer'></tr>
+        {% else %}
+            <tr>
+                <td colspan="6">No hay datos</td>
+            </tr>
+            <tr class='spacer'></tr>
+        {% endfor %}
+    </table>
+        
+    <div class="w-100">
+        {{ knp_pagination_render(players) }}
+    </div>
+    
 {% endblock %}
